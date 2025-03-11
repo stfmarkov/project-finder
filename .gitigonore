@@ -1,0 +1,26 @@
+# Go specific
+bin/
+build/
+out/
+*.exe
+*.test
+*.a
+*.prof
+
+# Dependency directories
+/vendor/
+Godeps/
+
+# IDE/editor specific
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Temporary files
+/tmp/
+.testdata/
