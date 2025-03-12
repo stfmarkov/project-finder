@@ -73,10 +73,10 @@ var listCmd = &cobra.Command{
 		}
 
 		for _, projectDir := range projectDirs {
+			// TODO: This can be done concurrently
 			findProjects(prefix+projectDir, &projects)
 		}
 
-		fmt.Println(projects, "Final state")
-
+		ChoiceSelector(projects)
 	},
 }
