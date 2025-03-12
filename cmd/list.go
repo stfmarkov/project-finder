@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/spf13/cobra"
 )
@@ -11,11 +12,10 @@ import (
 var projects []string = []string{}
 
 var projectDirs []string = []string{
-	"dev", "projects", "workspace", "work", "code", "repos", "repositories",
+	"dev", "projects", "workspace", "work", "code", "repos", "repositories", "boot-dev",
 }
 
-func findProjects(path string, projects []string) []string {
-
+func findProjects(path string, projects *[]string) {
 	fmt.Println(path)
 
 	files, err := os.ReadDir(path)
@@ -29,41 +29,54 @@ func findProjects(path string, projects []string) []string {
 
 		if file.IsDir() {
 
-			fmt.Println(file)
+			fmt.Println(file.Name(), "File name")
 
-			if file.Name() == ".git" {
-				projects = append(projects, path)
-				return projects
+			if file.Name() == ".git" && !slices.Contains(*projects, path) {
+				*projects = append(*projects, path)
+
+				fmt.Println(projects)
+
+				return
 			}
 
-			// findProjects(path+"/"+file.Name(), projects)
+			findProjects(path+"/"+file.Name(), projects)
 		}
 	}
-
-	return projects
 }
 
-func createPrefix() string {
+func createPrefix() (string, error) {
 	home, err := os.UserHomeDir()
 
 	if err != nil {
-		return home
+		return "", errors.New("error getting user home directory")
 	}
 
-	return "/"
+	// This is tested and works on WSL. It may or may not work on other systems.
+	// TODO: Add support for Windows
+	// TODO: Add support for Linux
+	// TODO: Add support for Mac
+
+	return home + "/", nil
 }
 
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all projects",
 	Run: func(cmd *cobra.Command, args []string) {
-
 		fmt.Println("Listing all projects...")
 
-		projects = findProjects(createPrefix()+"home", projects)
+		prefix, err := createPrefix()
+
+		if err != nil {
+			fmt.Println(errors.New("error getting user home directory"))
+			return
+		}
 
 		for _, projectDir := range projectDirs {
-			fmt.Println(projectDir, "projects:")
+			findProjects(prefix+projectDir, &projects)
 		}
+
+		fmt.Println(projects, "Final state")
+
 	},
 }
