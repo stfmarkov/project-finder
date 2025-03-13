@@ -64,6 +64,6 @@ var listCmd = &cobra.Command{
 			findProjects(prefix+projectDir, &projects)
 		}
 
-		ChoiceSelector(projects)
+		ChoiceSelector(projects, showProjectActions)
 	},
 }

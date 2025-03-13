@@ -8,15 +8,17 @@ import (
 )
 
 type model struct {
-	choices  []string
-	cursor   int
-	selected map[int]struct{}
+	choices    []string
+	cursor     int
+	choice     string
+	takaAction func(string)
 }
 
-func initialModel(choices []string) model {
+func initialModel(choices []string, takeAction func(string)) model {
 	return model{
-		choices:  choices,
-		selected: make(map[int]struct{}),
+		choices:    choices,
+		choice:     "",
+		takaAction: takeAction,
 	}
 }
 
@@ -45,12 +47,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		case "enter", " ":
-			_, ok := m.selected[m.cursor]
-			if ok {
-				delete(m.selected, m.cursor)
-			} else {
-				m.selected[m.cursor] = struct{}{}
-			}
+			m.choice = m.choices[m.cursor]
+
+			m.takaAction(m.choices[m.cursor])
+
+			return m, tea.Quit
 		}
 	}
 
@@ -58,57 +59,30 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	// The header
 	s := "Select a project\n\n"
 
-	// Iterate over our choices
 	for i, choice := range m.choices {
 
-		// Is the cursor pointing at this choice?
-		cursor := " " // no cursor
+		cursor := " "
 		if m.cursor == i {
-			cursor = ">" // cursor!
+			cursor = ">"
 		}
 
-		// Is this choice selected?
-		checked := " " // not selected
-		if _, ok := m.selected[i]; ok {
-			checked = "x" // selected!
-		}
-
-		// Render the row
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice)
+		s += fmt.Sprintf("%s %s\n", cursor, choice)
 	}
 
-	// The footer
 	s += "\nPress q to quit.\n"
 
-	// Send the UI for rendering
 	return s
 }
 
-func ChoiceSelector(choices []string) error {
+func ChoiceSelector(choices []string, takeAction func(string)) error {
+	p := tea.NewProgram(initialModel(choices, takeAction))
 
-	// initialModel(choices)
-
-	p := tea.NewProgram(initialModel(choices))
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)
 		os.Exit(1)
 	}
 
-	// // Create a new program
-	// p := tea.NewProgram(model{
-	// 	choices:  choices,
-	// 	cursor:   0,
-	// 	selected: make(map[int]struct{}),
-	// })
-
-	// // Start the program
-	// if err := p.Start(); err != nil {
-	// 	return err
-	// }
-
 	return nil
-
 }
