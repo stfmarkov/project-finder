@@ -27,6 +27,11 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+
+	if m.choice != "" {
+		return m, tea.Quit
+	}
+
 	switch msg := msg.(type) {
 
 	case tea.KeyMsg:
