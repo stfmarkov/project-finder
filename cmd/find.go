@@ -8,8 +8,8 @@ import (
 
 var findCmd = &cobra.Command{
 	Use:   "find",
-	Short: "Find a project",
+	Short: "Find a project (Not implemented) ",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Finding project...")
+		fmt.Println("Finding project... \n Will not find it ;)")
 	},
 }
