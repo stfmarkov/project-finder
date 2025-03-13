@@ -16,26 +16,15 @@ var projectDirs []string = []string{
 }
 
 func findProjects(path string, projects *[]string) {
-	fmt.Println(path)
-
 	files, err := os.ReadDir(path)
 	if err != nil {
-		fmt.Println(errors.New("error reading directory"))
+		// fmt.Println(errors.New("error reading directory"))
 	}
 
 	for _, file := range files {
-
-		fmt.Println(file)
-
 		if file.IsDir() {
-
-			fmt.Println(file.Name(), "File name")
-
 			if file.Name() == ".git" && !slices.Contains(*projects, path) {
 				*projects = append(*projects, path)
-
-				fmt.Println(projects)
-
 				return
 			}
 
@@ -63,8 +52,6 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all projects",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Listing all projects...")
-
 		prefix, err := createPrefix()
 
 		if err != nil {
