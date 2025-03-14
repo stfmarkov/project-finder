@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"pfinder/config"
 	"pfinder/utils"
 	"slices"
 
@@ -11,10 +12,6 @@ import (
 )
 
 var projects []string = []string{}
-
-var projectDirs []string = []string{
-	"dev", "projects", "workspace", "work", "code", "repos", "repositories", "boot-dev",
-}
 
 func findProjects(path string, projects *[]string) {
 	files, err := os.ReadDir(path)
@@ -34,22 +31,53 @@ func findProjects(path string, projects *[]string) {
 	}
 }
 
+func executeAction(project string) {
+	if project == AddDirActionStr {
+		DirectInput("Enter the path to the project: ", func(project string) {
+
+			err := config.AddProjectDir(project)
+
+			if err != nil {
+				fmt.Println("Error adding project directory:", err)
+				return
+			}
+
+			fmt.Println("Project directory added successfully")
+			listAllProjects()
+
+		})
+	} else {
+		showProjectActions(project)
+	}
+}
+
+func listAllProjects() {
+	prefix, err := utils.CreatePrefix()
+
+	if err != nil {
+		fmt.Println(errors.New("error getting user home directory"))
+		return
+	}
+
+	var projectDirs, fileErr = config.GetProjectDirs()
+
+	if fileErr != nil {
+		fmt.Println(errors.New("error reading config file"))
+		return
+	}
+
+	for _, projectDir := range projectDirs {
+		// TODO: This can be done concurrently
+		findProjects(prefix+projectDir, &projects)
+	}
+
+	ChoiceSelector(append(projects, AddDirActionStr), executeAction)
+}
+
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all projects",
 	Run: func(cmd *cobra.Command, args []string) {
-		prefix, err := utils.CreatePrefix()
-
-		if err != nil {
-			fmt.Println(errors.New("error getting user home directory"))
-			return
-		}
-
-		for _, projectDir := range projectDirs {
-			// TODO: This can be done concurrently
-			findProjects(prefix+projectDir, &projects)
-		}
-
-		ChoiceSelector(projects, showProjectActions)
+		listAllProjects()
 	},
 }

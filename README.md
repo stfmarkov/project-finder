@@ -6,7 +6,13 @@ A cli tool to manage local git projects
 
 - list - Lists all available projects. A project can be selected with "space" or "enter" keys to take additional actions
 
-- config ( Not implemented ) - Set home directory, add project directories, add projects to exclude in the listing and more
+- config - Set home directory, add project directories, add projects to exclude in the listing and more
+  
+  - Can add additional directories to search for projects ( by popular demand ) 
+
+  - Set home directory - ( Not implemented )
+
+  - Add projects to exclude in the listing ( Not implemented )
 
 - find ( Not implemented ) - Directly find a project by alias
 

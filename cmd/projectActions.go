@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+const AddDirActionStr = "These are not the projects I'm looking for"
+
 func navigateInWsl(project string) {
 	project = strings.ReplaceAll(project, "/home/", "")
 
