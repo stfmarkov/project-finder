@@ -16,12 +16,17 @@ before:
     # - go generate ./...
 
 builds:
-  - env:
+  - id: pFinder
+    main: ./main.go
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
-      - darwin
+    goarch:
+      - amd64
+    ldflags: '-s -w'
+    binary: pFinder
 
 archives:
   - formats: [tar.gz]
