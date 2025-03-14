@@ -26,7 +26,11 @@ func CreatePrefix() (string, error) {
 	}
 
 	if IsWindows() {
-		home := os.Getenv("SystemDrive")
+		home, err := os.Getwd()
+
+		if err != nil {
+			return "", errors.New("error getting user home directory")
+		}
 
 		fmt.Println("Home directory: ", home)
 
