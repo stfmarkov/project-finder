@@ -32,9 +32,11 @@ func CreatePrefix() (string, error) {
 			return "", errors.New("error getting user home directory")
 		}
 
-		fmt.Println("Home directory: ", home)
+		homeDrive := home[:2]
 
-		return home + "/", nil
+		fmt.Println("Home directory: ", homeDrive)
+
+		return homeDrive + "/", nil
 	}
 
 	return "", errors.New("unsupported operating system")
