@@ -21,7 +21,7 @@ func findProjects(path string, projects *[]string) {
 
 	for _, file := range files {
 		if file.IsDir() {
-			if file.Name() == ".git" && !slices.Contains(*projects, path) {
+			if (file.Name() == ".git" || file.Name() == "node_modules") && !slices.Contains(*projects, path) {
 				*projects = append(*projects, path)
 				return
 			}
