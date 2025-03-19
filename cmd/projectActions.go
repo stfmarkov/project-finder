@@ -60,7 +60,7 @@ func openInWsl(project string) {
 }
 
 func openInWindows(project string) {
-	cmd := exec.Command("cmd.exe", "/c", "start", "cmd", "/k", "code", project)
+	cmd := exec.Command("cmd.exe", "/c", "start", "cmd", "/k", "cd /d"+project+" && code . && npm run serve")
 
 	err := cmd.Start()
 
