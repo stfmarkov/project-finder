@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os/exec"
+	"pfinder/config"
 	"pfinder/utils"
 	"strings"
 )
@@ -86,9 +87,16 @@ func openProject(project string) {
 }
 
 func addCommand(project string) {
-	DirectInput("Adding command for project ( If the commands you entered do not work ... skill issues ): ", func(project string) {
+	DirectInput("Adding command for project ( If the commands you entered do not work ... skill issues ): ", func(command string) {
 
-		fmt.Println("Will add command for project", project)
+		fmt.Println("Will add command for project", command)
+
+		if command == "" {
+			fmt.Println("No command entered")
+			return
+		}
+
+		config.AddCommandForProject(project, command)
 
 		// err := config.AddProjectDir(project)
 

@@ -10,8 +10,15 @@ import (
 
 const configFileName = "pFinder.yaml"
 
+type Project struct {
+	Path     string
+	Alias    string
+	Commands []string
+}
+
 type Config struct {
 	ProjectDirs []string
+	Projects    []Project
 	// ProjectAliases  map[string]string
 	// ProjectCommands map[string][]string
 }
@@ -65,6 +72,22 @@ func GetProjectDirs() ([]string, error) {
 	return config.ProjectDirs, nil
 }
 
+func UpdateFile(config Config) error {
+	yamlConfig, err := yaml.Marshal(config)
+
+	if err != nil {
+		return fmt.Errorf("error updating config file: %w", err)
+	}
+
+	err = os.WriteFile(configFileName, yamlConfig, 0644)
+
+	if err != nil {
+		return fmt.Errorf("error updating config file: %w", err)
+	}
+
+	return nil
+}
+
 func AddProjectDir(projectDir string) error {
 	config, err := readFile()
 
@@ -78,17 +101,38 @@ func AddProjectDir(projectDir string) error {
 
 	config.ProjectDirs = append(config.ProjectDirs, projectDir)
 
-	yamlConfig, err := yaml.Marshal(config)
+	return UpdateFile(config)
+}
+
+func AddCommandForProject(project string, command string) error {
+	config, err := readFile()
 
 	if err != nil {
-		return fmt.Errorf("error adding project directory: %w", err)
+		return err
 	}
 
-	err = os.WriteFile(configFileName, yamlConfig, 0644)
-
-	if err != nil {
-		return fmt.Errorf("error adding project directory: %w", err)
+	if len(config.Projects) == 0 {
+		config.Projects = []Project{}
 	}
 
-	return nil
+	isExistingProject := false
+
+	for i, projectConfig := range config.Projects {
+		if projectConfig.Path == project {
+			config.Projects[i].Commands = append(config.Projects[i].Commands, command)
+			isExistingProject = true
+		}
+	}
+
+	if !isExistingProject {
+		projectConfig := Project{
+			Path:     project,
+			Alias:    "",
+			Commands: []string{command},
+		}
+
+		config.Projects = append(config.Projects, projectConfig)
+	}
+
+	return UpdateFile(config)
 }
