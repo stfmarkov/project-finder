@@ -34,6 +34,8 @@ A cli tool to manage local git projects
 
     - Add command
 
+    - List commands
+
     - Remove command ( Not implemented )
 
     - Swap ( Not implemented ) - Moves a command up or down. A command that is currently pointed at by the cursor can be moved up or down with specified keys 

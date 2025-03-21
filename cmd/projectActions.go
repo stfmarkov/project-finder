@@ -97,17 +97,19 @@ func addCommand(project string) {
 		}
 
 		config.AddCommandForProject(project, command)
+	})
+}
 
-		// err := config.AddProjectDir(project)
+func showCustomCommands(project string) {
+	commands, err := config.GetCommandsForProject(project)
 
-		// if err != nil {
-		// 	fmt.Println("Error adding project directory:", err)
-		// 	return
-		// }
+	if err != nil {
+		fmt.Println("Error getting commands for project", err)
+		return
+	}
 
-		// fmt.Println("Project directory added successfully")
-		// listAllProjects()
-
+	ChoiceSelector(commands, func(command string) {
+		fmt.Println("Will execute command", command)
 	})
 }
 
@@ -118,13 +120,15 @@ func showProjectActions(project string) {
 		"Navigate to project",
 		"Open project",
 		"Add command",
+		"Show custom commands",
 		// TODO: Add more actions
 	}
 
 	implementedActions := map[string]func(string){
-		"Navigate to project": navigateToProject,
-		"Open project":        openProject,
-		"Add command":         addCommand,
+		"Navigate to project":  navigateToProject,
+		"Open project":         openProject,
+		"Add command":          addCommand,
+		"Show custom commands": showCustomCommands,
 	}
 
 	takeAction := func(action string) {

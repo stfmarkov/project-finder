@@ -136,3 +136,19 @@ func AddCommandForProject(project string, command string) error {
 
 	return UpdateFile(config)
 }
+
+func GetCommandsForProject(project string) ([]string, error) {
+	config, err := readFile()
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, projectConfig := range config.Projects {
+		if projectConfig.Path == project {
+			return projectConfig.Commands, nil
+		}
+	}
+
+	return nil, fmt.Errorf("project not found")
+}
