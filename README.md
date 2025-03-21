@@ -36,7 +36,7 @@ A cli tool to manage local git projects
 
     - List commands
 
-    - Remove command ( Not implemented )
+    - Remove command
 
     - Swap ( Not implemented ) - Moves a command up or down. A command that is currently pointed at by the cursor can be moved up or down with specified keys 
 
@@ -47,6 +47,8 @@ A cli tool to manage local git projects
 - Find all action keys and implement the actual actions ( Not implemented )  
 
   - Direction keys ( Not implemented )
+
+  - Set specific configurable action keys for listings reducing the need to have multiple submenues ( Not implemented ) 
 
 - Show cursor ( Not implemented )
 
