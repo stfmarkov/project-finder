@@ -109,7 +109,7 @@ func showCustomCommands(project string) {
 	}
 
 	ChoiceSelector(commands, func(command string) {
-		fmt.Println("Will execute command", command)
+		showCommandActions(project, command)
 	})
 }
 

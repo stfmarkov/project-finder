@@ -137,6 +137,26 @@ func AddCommandForProject(project string, command string) error {
 	return UpdateFile(config)
 }
 
+func DeleteCommandForProject(project string, command string) {
+	config, err := readFile()
+
+	if err != nil {
+		return
+	}
+
+	for i, projectConfig := range config.Projects {
+		if projectConfig.Path == project {
+			for j, projectCommand := range projectConfig.Commands {
+				if projectCommand == command {
+					config.Projects[i].Commands = append(projectConfig.Commands[:j], projectConfig.Commands[j+1:]...)
+				}
+			}
+		}
+	}
+
+	UpdateFile(config)
+}
+
 func GetCommandsForProject(project string) ([]string, error) {
 	config, err := readFile()
 
