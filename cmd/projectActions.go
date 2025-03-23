@@ -51,7 +51,7 @@ func navigateToProject(project string) {
 func openInWsl(project string) {
 	project = strings.ReplaceAll(project, "/home/", "")
 
-	cmd := exec.Command("cmd.exe", "/c", "start", "wsl.exe", "bash", "-c", "code ~/../"+project)
+	cmd := exec.Command("cmd.exe", "/c", "start", "wsl.exe", "bash", "-c", "cd ~/../"+project+" && code . && exec bash")
 
 	err := cmd.Start()
 
@@ -61,7 +61,7 @@ func openInWsl(project string) {
 }
 
 func openInWindows(project string) {
-	cmd := exec.Command("cmd.exe", "/c", "start", "cmd", "/k", "cd /d"+project+" && code . && npm run serve")
+	cmd := exec.Command("cmd.exe", "/c", "start", "cmd", "/k", "cd /d"+project+" && code .")
 
 	err := cmd.Start()
 
@@ -84,6 +84,62 @@ func openProject(project string) {
 	}
 
 	fmt.Println("Unsupported OS")
+}
+
+func runInWsl(project string, commands string) {
+	project = strings.ReplaceAll(project, "/home/", "")
+
+	cmd := exec.Command("cmd.exe", "/c", "start", "wsl.exe", "bash", "-c", "code ~/../"+project)
+
+	err := cmd.Run()
+
+	if err != nil {
+		fmt.Println("Error running commands for project", err)
+	}
+
+	fmt.Println("Running commands for project", "cd ~/../"+project+" && "+commands+" && exec bash")
+
+	cmd = exec.Command("cmd.exe", "/c", "start", "wsl.exe", "bash", "-c", "cd ~/../"+project+" && "+commands+"; read -p 'Press enter to exit...'")
+
+	err = cmd.Start()
+
+	if err != nil {
+		fmt.Println("Error running commands for project", err)
+	}
+
+}
+
+func runInWindows(project string, commands string) {
+	cmd := exec.Command("cmd.exe", "/c", "start", "cmd", "/k", "cd /d"+project+" && code . && "+commands)
+
+	err := cmd.Start()
+
+	if err != nil {
+		fmt.Println("Error running commands for project", err)
+	}
+
+}
+
+func runProjectCommands(project string) {
+
+	commands, err := config.GetCommandsForProject(project)
+
+	if err != nil {
+		fmt.Println("Error getting commands for project", err)
+		return
+	}
+
+	commandsString := strings.Join(commands, " && ")
+
+	if utils.IsWSL() {
+		runInWsl(project, commandsString)
+		return
+	}
+
+	if utils.IsWindows() {
+		runInWindows(project, commandsString)
+		return
+	}
 }
 
 func addCommand(project string) {
@@ -117,6 +173,7 @@ func showProjectActions(project string) {
 	fmt.Println("Will show project actions for", project)
 
 	actions := []string{
+		"Run project commands",
 		"Navigate to project",
 		"Open project",
 		"Add command",
@@ -125,6 +182,7 @@ func showProjectActions(project string) {
 	}
 
 	implementedActions := map[string]func(string){
+		"Run project commands": runProjectCommands,
 		"Navigate to project":  navigateToProject,
 		"Open project":         openProject,
 		"Add command":          addCommand,
