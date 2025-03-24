@@ -95,6 +95,7 @@ func runInWsl(project string, commands string) {
 
 	if err != nil {
 		fmt.Println("Error running commands for project", err)
+		return
 	}
 
 	fmt.Println("Running commands for project", "cd ~/../"+project+" && "+commands+" && exec bash")

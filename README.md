@@ -26,11 +26,11 @@ A cli tool to manage local git projects
 
 - Open - Opens the project in vsCode
 
-- Config ( Not implemented ) - Creates a project specifi config  
+- Config - Creates a project specifi config  
 
   - Set name ( Not implemented ) - Sets an alias for the project 
 
-  - Commands ( Not implemented ) - Shows a list of commands and actions for them. The commands will be executed in order when a "run" action is executed
+  - Commands - Shows a list of commands and actions for them. The commands will be executed in order when a "run" action is executed
 
     - Add command
 
@@ -38,9 +38,9 @@ A cli tool to manage local git projects
 
     - Remove command
 
-    - Swap ( Not implemented ) - Moves a command up or down. A command that is currently pointed at by the cursor can be moved up or down with specified keys 
+    - Swap ( Not implemented. Will be implemented when actions are executable by "action buttons" instead of submenues ) - Moves a command up or down. A command that is currently pointed at by the cursor can be moved up or down with specified keys 
 
-- Run ( Not implemented ) - Runs the project in a way specified by its config
+- Run - Runs the project in a way specified by its config
 
 ## UI
 
@@ -50,6 +50,10 @@ A cli tool to manage local git projects
 
   - Set specific configurable action keys for listings reducing the need to have multiple submenues ( Not implemented ) 
 
-- Show cursor ( Not implemented )
+- Show cursor. The currently selected item in a menue should be with different color (green may be, it is hacky) ( Not implemented )
 
 - Add colors to the currently selected items like projects, actions, commands and so on ( Not implemented )
+
+- List projects after previous actions are done ( Not implemented )
+
+- Better error handling and messages ( Not implemented )
