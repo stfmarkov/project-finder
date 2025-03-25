@@ -222,6 +222,24 @@ func GetProjects() ([]string, error) {
 	return paths, nil
 }
 
+func FindProject(searchTerm string) ([]string, error) {
+	config, err := readFile()
+
+	if err != nil {
+		return nil, err
+	}
+
+	projects := []string{}
+
+	for _, project := range config.Projects {
+		if strings.Contains(project.Path, searchTerm) {
+			projects = append(projects, project.Path)
+		}
+	}
+
+	return projects, nil
+}
+
 func SaveProjects(projects []string) error {
 	for _, project := range projects {
 		err := AddProjectToConfig(project)

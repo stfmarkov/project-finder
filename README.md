@@ -4,13 +4,13 @@ A cli tool to manage local git projects
 
 ## Commands
 
+- fetch - Finds and saves all the projects in the config file
+
 - list - Lists all available projects. A project can be selected with "space" or "enter" keys to take additional actions
   
-  - Save all the found projects in the config ( Not implemented )
+  - All projects are listed form cash
 
-  - Initialy list projects from the config and later update the list if needed ( Not implemented )
-
-- config - Set home directory, add project directories, add projects to exclude in the listing and more
+- config ( Not implemented. Some functionality is move as project actions ) - Set home directory, add project directories, add projects to exclude in the listing and more
   
   - Can add additional directories to search for projects ( by popular demand ) 
 
@@ -18,7 +18,7 @@ A cli tool to manage local git projects
 
   - Add projects to exclude in the listing ( Not implemented )
 
-- find ( Not implemented ) - Directly find a project by alias, list all that match the search, the search is applied over the already found and saved in the config files
+- find - Directly find a project by alias, list all that match the search, the search is applied over the already found and saved in the config files
 
 ## Project actions
 

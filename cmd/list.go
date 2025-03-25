@@ -7,26 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func executeAction(project string) {
-	if project == AddDirActionStr {
-		DirectInput("Enter the path to the project: ", func(project string) {
-
-			err := config.AddProjectDir(project)
-
-			if err != nil {
-				fmt.Println("Error adding project directory:", err)
-				return
-			}
-
-			fmt.Println("Project directory added successfully")
-			listAllProjects()
-
-		})
-	} else {
-		showProjectActions(project)
-	}
-}
-
 func listAllProjects() error {
 	var err error
 	projects, err := config.GetProjects()
