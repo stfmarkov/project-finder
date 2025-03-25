@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -104,6 +105,38 @@ func AddProjectDir(projectDir string) error {
 	return UpdateFile(config)
 }
 
+func AddProjectToConfig(project string) error {
+	config, err := readFile()
+
+	if err != nil {
+		return err
+	}
+
+	if len(config.Projects) == 0 {
+		config.Projects = []Project{}
+	}
+
+	isExistingProject := false
+
+	for _, projectConfig := range config.Projects {
+		if projectConfig.Path == project {
+			isExistingProject = true
+		}
+	}
+
+	if isExistingProject {
+		return nil
+	}
+
+	config.Projects = append(config.Projects, Project{
+		Path:     project,
+		Alias:    strings.Split(project, "/")[len(strings.Split(project, "/"))-1],
+		Commands: []string{},
+	})
+
+	return UpdateFile(config)
+}
+
 func AddCommandForProject(project string, command string) error {
 	config, err := readFile()
 
@@ -127,7 +160,7 @@ func AddCommandForProject(project string, command string) error {
 	if !isExistingProject {
 		projectConfig := Project{
 			Path:     project,
-			Alias:    "",
+			Alias:    strings.Split(project, "/")[len(strings.Split(project, "/"))-1],
 			Commands: []string{command},
 		}
 
@@ -171,4 +204,32 @@ func GetCommandsForProject(project string) ([]string, error) {
 	}
 
 	return nil, fmt.Errorf("project not found")
+}
+
+func GetProjects() ([]string, error) {
+	config, err := readFile()
+
+	if err != nil {
+		return nil, err
+	}
+
+	paths := []string{}
+
+	for _, project := range config.Projects {
+		paths = append(paths, project.Path)
+	}
+
+	return paths, nil
+}
+
+func SaveProjects(projects []string) error {
+	for _, project := range projects {
+		err := AddProjectToConfig(project)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

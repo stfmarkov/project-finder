@@ -51,7 +51,21 @@ func executeAction(project string) {
 	}
 }
 
+func showProjectListing() error {
+	var err error
+	projects, err := config.GetProjects()
+
+	if err == nil {
+		ChoiceSelector(append(projects, AddDirActionStr), executeAction)
+	}
+
+	return err
+}
+
 func listAllProjects() {
+
+	_ = showProjectListing()
+
 	prefix, err := utils.CreatePrefix()
 
 	if err != nil {
@@ -71,7 +85,13 @@ func listAllProjects() {
 		findProjects(prefix+projectDir, &projects)
 	}
 
-	ChoiceSelector(append(projects, AddDirActionStr), executeAction)
+	config.SaveProjects(projects)
+
+	err = showProjectListing()
+
+	if err != nil {
+		fmt.Println(errors.New("error listing projects"))
+	}
 }
 
 var listCmd = &cobra.Command{
