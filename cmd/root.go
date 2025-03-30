@@ -18,8 +18,8 @@ var rootCmd = &cobra.Command{
 func Execute() {
 
 	rootCmd.AddCommand(fetchCmd)
-	rootCmd.AddCommand(findCmd)
 	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(findCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

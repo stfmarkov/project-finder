@@ -46,14 +46,14 @@ A cli tool to manage local git projects
 
 - Find all action keys and implement the actual actions ( Not implemented )  
 
-  - Direction keys ( Not implemented )
+  - Direction keys
 
   - Set specific configurable action keys for listings reducing the need to have multiple submenues ( Not implemented ) 
 
-- Show cursor. The currently selected item in a menue should be with different color (green may be, it is hacky) ( Not implemented )
+- Show cursor. The currently selected item in a menue should be with different color (green may be, it is hacky)
 
-- Add colors to the currently selected items like projects, actions, commands and so on ( Not implemented )
+- Add colors to the currently selected items like projects, actions, commands and so on
 
-- List projects after previous actions are done ( Not implemented )
+- List projects after previous actions are done
 
 - Better error handling and messages ( Not implemented )

@@ -12,7 +12,7 @@ const AddDirActionStr = "These are not the projects I'm looking for"
 
 func executeAction(project string) {
 	if project == AddDirActionStr {
-		DirectInput("Enter the path to the project: ", func(project string) {
+		DirectInput("Add new folder to search( Execute list again afterwords ): ", func(project string) {
 
 			err := config.AddProjectDir(project)
 
@@ -22,8 +22,8 @@ func executeAction(project string) {
 			}
 
 			fmt.Println("Project directory added successfully")
-			listAllProjects()
 
+			fetchProjects()
 		})
 	} else {
 		showProjectActions(project)
@@ -164,7 +164,7 @@ func runProjectCommands(project string) {
 }
 
 func addCommand(project string) {
-	DirectInput("Adding command for project ( If the commands you entered do not work ... skill issues ): ", func(command string) {
+	DirectInput("Adding command for project ( If the commands you entered does not work ... skill issues ): ", func(command string) {
 
 		fmt.Println("Will add command for project", command)
 
@@ -194,20 +194,20 @@ func showProjectActions(project string) {
 	fmt.Println("Will show project actions for", project)
 
 	actions := []string{
-		"Run project commands",
-		"Navigate to project",
-		"Open project",
-		"Add command",
+		"Open in code editor",
+		"Navigate in new terminal",
+		"Run custom commands",
+		"Add custom command",
 		"Show custom commands",
 		// TODO: Add more actions
 	}
 
 	implementedActions := map[string]func(string){
-		"Run project commands": runProjectCommands,
-		"Navigate to project":  navigateToProject,
-		"Open project":         openProject,
-		"Add command":          addCommand,
-		"Show custom commands": showCustomCommands,
+		"Run custom commands":      runProjectCommands,
+		"Navigate in new terminal": navigateToProject,
+		"Open in code editor":      openProject,
+		"Add custom command":       addCommand,
+		"Show custom commands":     showCustomCommands,
 	}
 
 	takeAction := func(action string) {

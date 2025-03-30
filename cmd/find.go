@@ -18,7 +18,7 @@ func searchForProjects(searchTerm string) ([]string, error) {
 
 var findCmd = &cobra.Command{
 	Use:   "find",
-	Short: "Find a project",
+	Short: "Finds a project from the list of fetched projects",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		projects, err := searchForProjects(args[0])
