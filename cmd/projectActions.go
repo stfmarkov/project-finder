@@ -212,6 +212,7 @@ func showProjectActions(project string) {
 
 	takeAction := func(action string) {
 		implementedActions[action](project)
+		listAllProjects()
 	}
 
 	ChoiceSelector(actions, takeAction)
